@@ -55,6 +55,7 @@ module Homebrew
   tap = ENV['TAP']
   cask = ENV['CASK']
   tag = ENV['TAG']
+  version = ENV['VERSION']
   force = ENV['FORCE']
   livecheck = ENV['LIVECHECK']
 
@@ -64,7 +65,7 @@ module Homebrew
   # Check inputs
   if livecheck.false?
     odie "Need 'cask' input specified" if cask.blank?
-    odie "Need 'tag' input specified" if tag.blank?
+    odie "Need 'tag' or 'version' input specified" if tag.blank? && version.blank?
   end
 
   # Get user details
@@ -104,7 +105,7 @@ module Homebrew
 
     # Prepare version
     tag = tag.delete_prefix 'refs/tags/'
-    version = Version.parse tag
+    version = Version.parse(tag) if version.blank?
 
     # Finally bump the cask
     brew 'bump-cask-pr',

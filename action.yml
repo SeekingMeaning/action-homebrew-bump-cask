@@ -42,6 +42,9 @@ inputs:
       Example: refs/tags/v1.0.0
     required: false
     default: ${{github.ref}}
+  version:
+    description: Cask version.
+    required: false
   force:
     description: Check open PRs or not (will fail if detected)
     required: false
@@ -67,5 +70,6 @@ runs:
         TAP: ${{inputs.tap}}
         CASK: ${{inputs.cask}}
         TAG: ${{inputs.tag}}
+        VERSION: ${{inputs.version}}
         FORCE: ${{inputs.force}}
         LIVECHECK: ${{inputs.livecheck}}
