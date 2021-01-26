@@ -111,7 +111,7 @@ module Homebrew
     brew 'bump-cask-pr',
          '--online',
          '--no-browse',
-         "--message=#{message}",
+         *("--message=#{message}" if message.present?),
          "--version=#{version}",
          *('--force' unless force.false?),
          cask
@@ -149,7 +149,7 @@ module Homebrew
         brew 'bump-cask-pr',
              '--online',
              '--no-browse',
-             "--message=#{message}",
+             *("--message=#{message}" if message.present?),
              "--version=#{version}",
              *('--force' unless force.false?),
              cask
