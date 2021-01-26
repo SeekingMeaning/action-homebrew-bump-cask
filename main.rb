@@ -109,7 +109,7 @@ module Homebrew
 
     # Finally bump the cask
     brew 'bump-cask-pr',
-         '--no-audit',
+         '--online',
          '--no-browse',
          "--message=#{message}",
          "--version=#{version}",
@@ -147,7 +147,7 @@ module Homebrew
       begin
         # Finally bump the cask
         brew 'bump-cask-pr',
-             '--no-audit',
+             '--online',
              '--no-browse',
              "--message=#{message}",
              "--version=#{version}",
