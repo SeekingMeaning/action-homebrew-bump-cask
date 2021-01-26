@@ -2,9 +2,7 @@
 
 An action forked from [`dawidd6/action-homebrew-bump-formula`](https://github.com/dawidd6/action-homebrew-bump-formula) that wraps `brew bump-cask-pr` to ease the process of updating the cask on new project releases.
 
-Runs on `ubuntu` and `macos`.
-
-It it is recommended to run this Action on `macos` if bumping a cask in core tap. You can run into issues when doing so on `ubuntu`.
+Runs on `macos`.
 
 ## Usage
 
