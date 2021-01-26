@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'formula'
+require 'cask'
 
 class Object
   def false?
@@ -53,9 +53,8 @@ module Homebrew
   token = ENV['TOKEN']
   message = ENV['MESSAGE']
   tap = ENV['TAP']
-  formula = ENV['FORMULA']
+  cask = ENV['CASK']
   tag = ENV['TAG']
-  revision = ENV['REVISION']
   force = ENV['FORCE']
   livecheck = ENV['LIVECHECK']
 
@@ -64,7 +63,7 @@ module Homebrew
 
   # Check inputs
   if livecheck.false?
-    odie "Need 'formula' input specified" if formula.blank?
+    odie "Need 'cask' input specified" if cask.blank?
     odie "Need 'tag' input specified" if tag.blank?
   end
 
@@ -94,40 +93,32 @@ module Homebrew
   message = if message.blank?
               ''
             else
-              message + "\n\n"
+              message # + "\n\n"
             end
-  message += '[`action-homebrew-bump-formula`](https://github.com/dawidd6/action-homebrew-bump-formula)'
+  # message += '[`action-homebrew-bump-cask`](https://github.com/SeekingMeaning/action-homebrew-bump-cask)'
 
   # Do the livecheck stuff or not
   if livecheck.false?
-    # Change formula name to full name
-    formula = tap + '/' + formula if !tap.blank? && !formula.blank?
+    # Change cask name to full name
+    cask = tap + '/' + cask if !tap.blank? && !cask.blank?
 
-    # Get info about formula
-    stable = Formula[formula].stable
-    is_git = stable.downloader.is_a? GitDownloadStrategy
-
-    # Prepare tag and url
+    # Prepare version
     tag = tag.delete_prefix 'refs/tags/'
     version = Version.parse tag
-    url = stable.url.gsub stable.version, version
 
-    # Finally bump the formula
-    brew 'bump-formula-pr',
+    # Finally bump the cask
+    brew 'bump-cask-pr',
          '--no-audit',
          '--no-browse',
          "--message=#{message}",
-         *("--version=#{version}" unless is_git),
-         *("--url=#{url}" unless is_git),
-         *("--tag=#{tag}" if is_git),
-         *("--revision=#{revision}" if is_git),
+         "--version=#{version}",
          *('--force' unless force.false?),
-         formula
+         cask
   else
-    # Support multiple formulae in input and change to full names if tap
-    unless formula.blank?
-      formula = formula.split(/[ ,\n]/).reject(&:blank?)
-      formula = formula.map { |f| tap + '/' + f } unless tap.blank?
+    # Support multiple casks in input and change to full names if tap
+    unless cask.blank?
+      cask = cask.split(/[ ,\n]/).reject(&:blank?)
+      cask = cask.map { |f| tap + '/' + f } unless tap.blank?
     end
 
     # Get livecheck info
@@ -136,8 +127,8 @@ module Homebrew
                      '--newer-only',
                      '--full-name',
                      '--json',
-                     *("--tap=#{tap}" if !tap.blank? && formula.blank?),
-                     *(formula unless formula.blank?)
+                     *("--tap=#{tap}" if !tap.blank? && cask.blank?),
+                     *(cask unless cask.blank?)
     json = JSON.parse json
 
     # Define error
@@ -148,19 +139,19 @@ module Homebrew
       # Skip if there is no version field
       next unless info['version']
 
-      # Get info about formula
-      formula = info['formula']
+      # Get info about cask
+      cask = info['cask']
       version = info['version']['latest']
 
       begin
-        # Finally bump the formula
-        brew 'bump-formula-pr',
+        # Finally bump the cask
+        brew 'bump-cask-pr',
              '--no-audit',
              '--no-browse',
              "--message=#{message}",
              "--version=#{version}",
              *('--force' unless force.false?),
-             formula
+             cask
       rescue ErrorDuringExecution => e
         # Continue execution on error, but save the exeception
         err = e
