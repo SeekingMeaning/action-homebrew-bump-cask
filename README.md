@@ -1,6 +1,6 @@
 # Homebrew bump cask GitHub Action
 
-An action that wraps `brew bump-cask-pr` to ease the process of updating the cask on new project releases.
+An action forked from [`dawidd6/action-homebrew-bump-formula`](https://github.com/dawidd6/action-homebrew-bump-formula) that wraps `brew bump-cask-pr` to ease the process of updating the cask on new project releases.
 
 Runs on `ubuntu` and `macos`.
 
