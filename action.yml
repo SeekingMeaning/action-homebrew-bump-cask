@@ -45,6 +45,9 @@ inputs:
   version:
     description: Cask version.
     required: false
+  url:
+    description: Cask URL.
+    required: false
   force:
     description: Check open PRs or not (will fail if detected)
     required: false
@@ -71,5 +74,6 @@ runs:
         CASK: ${{inputs.cask}}
         TAG: ${{inputs.tag}}
         VERSION: ${{inputs.version}}
+        URL: ${{inputs.url}}
         FORCE: ${{inputs.force}}
         LIVECHECK: ${{inputs.livecheck}}
