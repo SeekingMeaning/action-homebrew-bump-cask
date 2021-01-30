@@ -56,6 +56,7 @@ module Homebrew
   cask = ENV['CASK']
   tag = ENV['TAG']
   version = ENV['VERSION']
+  url = ENV['URL']
   force = ENV['FORCE']
   livecheck = ENV['LIVECHECK']
 
@@ -113,6 +114,7 @@ module Homebrew
          '--no-browse',
          *("--message=#{message}" if message.present?),
          "--version=#{version}",
+         *("--url=#{url}" if url.present?),
          *('--force' unless force.false?),
          cask
   else
